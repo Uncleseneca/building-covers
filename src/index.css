@@ -15,3 +15,9 @@ code {
 label {
   display: block;
 }
+
+.button-reset {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}

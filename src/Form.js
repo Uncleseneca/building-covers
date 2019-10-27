@@ -1,3 +1,5 @@
+//@ts-check
+
 import {
   Button,
   CssBaseline,
@@ -9,13 +11,27 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import { PLANTS } from 'api/doc-types';
-import { firestore } from 'api/firebase';
 import { Checkbox, TextField } from 'final-form-material-ui';
-import React from 'react';
+import React, { useState } from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 
-export function Form({ title, onSubmit }) {
+export function Form({
+  title,
+  onSubmit,
+  defaultValues,
+  resetAfterSubmit = false,
+}) {
+  const [key, setKey] = useState(0);
+
+  const handleFormSubmit = handleSubmit => {
+    return async values => {
+      await handleSubmit(values);
+      if (resetAfterSubmit) {
+        setKey(Math.random());
+      }
+    };
+  };
+
   return (
     <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
       <CssBaseline />
@@ -23,9 +39,11 @@ export function Form({ title, onSubmit }) {
         {title}
       </Typography>
       <FinalForm
+        key={key}
+        initialValues={defaultValues}
         onSubmit={onSubmit}
         render={({ handleSubmit, submitting }) => (
-          <form onSubmit={handleSubmit} noValidate>
+          <form onSubmit={handleFormSubmit(handleSubmit)} noValidate>
             <Paper style={{ padding: 16 }}>
               <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={12}>

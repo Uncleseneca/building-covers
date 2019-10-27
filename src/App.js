@@ -1,8 +1,9 @@
-import { AddPlant } from 'AddPlant';
-import { Plants } from 'Plants';
+import { AddPlant } from 'plant/AddPlant';
+import { Plants } from 'plant/Plants';
 import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import './App.css';
+import { Plant } from 'plant/Plant';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Switch>
         <Route exact path="/plants/add" component={AddPlant}></Route>
         <Route exact path="/plants" component={Plants}></Route>
+        <Route exact path="/plants/:id" component={Plant}></Route>
       </Switch>
     </div>
   );
