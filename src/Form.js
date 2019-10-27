@@ -15,16 +15,12 @@ import { Checkbox, TextField } from 'final-form-material-ui';
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 
-const onSubmit = plant => {
-  firestore.collection(PLANTS).add({ ...plant, createdAt: new Date() });
-};
-
-export function Form() {
+export function Form({ title, onSubmit }) {
   return (
     <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
       <CssBaseline />
       <Typography variant="h4" align="center" component="h1" gutterBottom>
-        Добавить растение
+        {title}
       </Typography>
       <FinalForm
         onSubmit={onSubmit}
