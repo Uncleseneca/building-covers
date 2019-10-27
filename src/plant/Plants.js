@@ -9,9 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom';
-import { usePlants } from './usePlants';
-import { removePlant } from './removePlant';
-import { fieldsDict } from './fieldsDict';
+import { usePlants } from './helpers/usePlants';
+import { removePlant } from './helpers/removePlant';
+import { plantSystems } from 'api/dictionaries';
 
 const useStyles = makeStyles({
   root: {
@@ -53,7 +53,7 @@ export function Plants() {
                   <TableCell align="right">{plant.costPerMeter}</TableCell>
                   <TableCell align="right">
                     {(plant.system || [])
-                      .map(system => fieldsDict.system[system])
+                      .map(system => (plantSystems[system] || {}).label)
                       .join(', ')}
                   </TableCell>
                   <TableCell align="right">

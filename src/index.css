@@ -21,3 +21,9 @@ label {
   border: none;
   cursor: pointer;
 }
+
+.content-container {
+  padding: 16px;
+  margin: auto;
+  max-width: 600px;
+}

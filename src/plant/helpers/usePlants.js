@@ -1,7 +1,7 @@
 import { collectIdsAndDocs } from 'api/helpers';
 import { useEffect, useRef, useState } from 'react';
-import { PLANTS } from '../api/doc-types';
-import { firestore } from '../api/firebase';
+import { PLANTS } from '../../api/dictionaries';
+import { firestore } from '../../api/firebase';
 
 export const usePlants = () => {
   const [plants, setPlants] = useState(null);

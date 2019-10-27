@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form } from '../Form';
-import { PLANTS } from 'api/doc-types';
+import { PlantForm } from './PlantForm';
+import { PLANTS } from 'api/dictionaries';
 import { firestore } from 'api/firebase';
 
 const onSubmit = plant => {
@@ -9,6 +9,6 @@ const onSubmit = plant => {
 
 export const AddPlant = () => {
   return (
-    <Form title="Добавить растение" onSubmit={onSubmit} resetAfterSubmit />
+    <PlantForm title="Добавить растение" onSubmit={onSubmit} resetAfterSubmit />
   );
 };

@@ -1,9 +1,9 @@
 // @ts-check
 import React from 'react';
-import { Form } from '../Form';
-import { PLANTS } from 'api/doc-types';
+import { PlantForm } from './PlantForm';
+import { PLANTS } from 'api/dictionaries';
 import { firestore } from 'api/firebase';
-import { usePlant } from 'plant/usePlant';
+import { usePlant } from 'plant/helpers/usePlant';
 import { useParams, useHistory } from 'react-router-dom';
 
 const sendFormData = async plant => {
@@ -23,6 +23,10 @@ export const Plant = () => {
     push('/plants');
   };
   return (
-    <Form defaultValues={plant} title="Изменить растение" onSubmit={onSubmit} />
+    <PlantForm
+      defaultValues={plant}
+      title="Изменить растение"
+      onSubmit={onSubmit}
+    />
   );
 };
