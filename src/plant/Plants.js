@@ -38,29 +38,35 @@ export function Plants() {
         </TableHead>
         <TableBody>
           {plants &&
-            plants.map(plant => (
-              <TableRow key={plant.name}>
-                <TableCell align="right">
-                  <Link to={`/plants/${plant.id}`}>{plant.name}</Link>
-                </TableCell>
-                <TableCell align="right">{plant.noiseReduction}</TableCell>
-                <TableCell align="right">{plant.costPerMeter}</TableCell>
-                <TableCell align="right">
-                  {(plant.system || [])
-                    .map(system => fieldsDict.system[system])
-                    .join(', ')}
-                </TableCell>
-                <TableCell align="right">
-                  <button
-                    title="Удалить"
-                    className="button-reset"
-                    onClick={() => removePlant(plant.id)}
-                  >
-                    ❌
-                  </button>
-                </TableCell>
-              </TableRow>
-            ))}
+            plants
+              .sort(
+                (plant1, plant2) =>
+                  plant2.createdAt.toDate().valueOf() -
+                  plant1.createdAt.toDate().valueOf(),
+              )
+              .map(plant => (
+                <TableRow key={plant.name}>
+                  <TableCell align="right">
+                    <Link to={`/plants/${plant.id}`}>{plant.name}</Link>
+                  </TableCell>
+                  <TableCell align="right">{plant.noiseReduction}</TableCell>
+                  <TableCell align="right">{plant.costPerMeter}</TableCell>
+                  <TableCell align="right">
+                    {(plant.system || [])
+                      .map(system => fieldsDict.system[system])
+                      .join(', ')}
+                  </TableCell>
+                  <TableCell align="right">
+                    <button
+                      title="Удалить"
+                      className="button-reset"
+                      onClick={() => removePlant(plant.id)}
+                    >
+                      ❌
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
     </Paper>
