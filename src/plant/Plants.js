@@ -1,20 +1,18 @@
 // @ts-check
-import React from 'react';
-
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { Link } from 'react-router-dom';
-import { usePlants } from './helpers/usePlants';
-import { removePlant } from './helpers/removePlant';
 import { plantSystems } from 'api/dictionaries';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { removePlant } from './helpers/removePlant';
 import { usePlantsContext } from './PlantsContext';
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
   root: {
     overflowX: 'auto',
     maxWidth: 650,

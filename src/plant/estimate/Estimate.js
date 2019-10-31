@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { objectTypes } from 'api/dictionaries';
-import { Checkbox, Radio, TextField } from 'final-form-material-ui';
+import { Checkbox, TextField } from 'final-form-material-ui';
 import { isEmpty } from 'lodash';
 import { usePlantsContext } from 'plant/PlantsContext';
 import React from 'react';
@@ -16,6 +16,7 @@ import { decorator } from './helpers/decorators';
 import { getPlants } from './helpers/getPlants';
 import { getShowResults } from './helpers/getShowResults';
 import { Misc } from './Misc';
+import { ObjectType } from './ObjectType';
 import { Results } from './Results';
 import { System } from './System';
 
@@ -44,7 +45,7 @@ export const Estimate = () => {
   return (
     <div className="content-container">
       <Box mb={5}>
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h5" component="h1" gutterBottom>
           Расчет растений
         </Typography>
       </Box>
@@ -59,7 +60,10 @@ export const Estimate = () => {
           const showRoofSystems = values.objectType === objectTypes.roof.value;
           const showAreaAndNoiseReduction = !!values.system;
           const showPlants =
-            !!values.area && !!values.noiseReduction && !!plants;
+            !!values.area &&
+            !!values.noiseReduction &&
+            !!plants &&
+            !isEmpty(getPlants(plants, values));
           const showMisc = !isEmpty(values.plants);
           // TODO: make a real condition with context check
           const showResults = !!plants && getShowResults(values);
@@ -67,46 +71,25 @@ export const Estimate = () => {
             showResults &&
             values.plants &&
             plants.filter(plant => values.plants.includes(plant.name));
-          debugger;
           return (
             <form onSubmit={handleSubmit}>
               <Paper style={{ padding: '32px 16px' }}>
                 <Grid direction="column" container spacing={5}>
                   <Grid item xs={12}>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                      Выбор объекта
-                    </Typography>
-                    <Grid direction="column" container>
-                      <FormControlLabel
-                        label={objectTypes.walls.label}
-                        control={
-                          <Field
-                            name="objectType"
-                            component={Radio}
-                            type="radio"
-                            value={objectTypes.walls.value}
-                          />
-                        }
-                      />
-                      <FormControlLabel
-                        label={objectTypes.roof.label}
-                        control={
-                          <Field
-                            name="objectType"
-                            component={Radio}
-                            type="radio"
-                            value={objectTypes.roof.value}
-                          />
-                        }
-                      />
-                      {showSystems && (
+                    <Box mb={2}>
+                      <ObjectType />
+                    </Box>
+                    {showSystems && (
+                      <Box mb={2}>
                         <System
                           showRoofSystems={showRoofSystems}
                           showWallsSystems={showWallsSystems}
                         />
-                      )}
-                      {showAreaAndNoiseReduction && (
-                        <>
+                      </Box>
+                    )}
+                    {showAreaAndNoiseReduction && (
+                      <>
+                        <Box display="flex" flexDirection="column" mb={2}>
                           <Typography variant="h5" component="h2" gutterBottom>
                             Площадь озеленения, м²
                           </Typography>
@@ -115,6 +98,8 @@ export const Estimate = () => {
                             component={TextField}
                             type="number"
                           />
+                        </Box>
+                        <Box display="flex" flexDirection="column" mb={2}>
                           <Typography variant="h5" component="h2" gutterBottom>
                             Минимальное шумопоглощение, дб
                           </Typography>
@@ -123,10 +108,15 @@ export const Estimate = () => {
                             component={TextField}
                             type="number"
                           />
-                        </>
-                      )}
-                      {showPlants &&
-                        getPlants(plants, values).map(plant => (
+                        </Box>
+                      </>
+                    )}
+                    {showPlants && (
+                      <Box display="flex" flexDirection="column" mb={2}>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                          Выбор растений
+                        </Typography>
+                        {getPlants(plants, values).map(plant => (
                           <FormControlLabel
                             key={plant.name}
                             label={plant.name}
@@ -140,16 +130,24 @@ export const Estimate = () => {
                             }
                           />
                         ))}
-                      {showMisc && <Misc />}
-                      {showResults &&
-                        resultsPlants.map(resultPlant => (
+                      </Box>
+                    )}
+                    {showMisc && (
+                      <Box mb={2}>
+                        <Misc />
+                      </Box>
+                    )}
+                    {showResults && (
+                      <Box mb={2}>
+                        {resultsPlants.map(resultPlant => (
                           <Results
                             plant={resultPlant}
                             estimateContext={values}
                             key={resultPlant.name}
                           />
                         ))}
-                    </Grid>
+                      </Box>
+                    )}
                   </Grid>
                 </Grid>
               </Paper>
