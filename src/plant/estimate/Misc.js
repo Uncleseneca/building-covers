@@ -81,7 +81,7 @@ export function Misc() {
         label="Стоимость материалов для монтажа"
         name="installationMaterialsCost"
         component={TextField}
-        type="text"
+        type="number"
       />
     </Grid>
   );

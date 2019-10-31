@@ -9,13 +9,15 @@ import {
 import { objectTypes } from 'api/dictionaries';
 import { Checkbox, Radio, TextField } from 'final-form-material-ui';
 import { isEmpty } from 'lodash';
+import { usePlantsContext } from 'plant/PlantsContext';
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
-import { usePlants } from '../helpers/usePlants';
+import { decorator } from './helpers/decorators';
 import { getPlants } from './helpers/getPlants';
+import { getShowResults } from './helpers/getShowResults';
 import { Misc } from './Misc';
-import { System } from './System';
 import { Results } from './Results';
+import { System } from './System';
 
 const initialValues = {
   objectType: 'walls',
@@ -37,7 +39,7 @@ const initialValues = {
 };
 
 export const Estimate = () => {
-  const plants = usePlants();
+  const plants = usePlantsContext();
 
   return (
     <div className="content-container">
@@ -49,21 +51,23 @@ export const Estimate = () => {
       <FinalForm
         initialValues={initialValues}
         onSubmit={console.log}
+        decorators={[decorator]}
         render={({ handleSubmit, values }) => {
           const showSystems = !!values.objectType;
           const showWallsSystems =
             values.objectType === objectTypes.walls.value;
           const showRoofSystems = values.objectType === objectTypes.roof.value;
-          const showArea = !!values.system;
-          const showNoiseReduction = !!values.area;
-          const showPlants = !!values.noiseReduction && plants;
+          const showAreaAndNoiseReduction = !!values.system;
+          const showPlants =
+            !!values.area && !!values.noiseReduction && !!plants;
           const showMisc = !isEmpty(values.plants);
           // TODO: make a real condition with context check
-          const showResults = !!plants;
+          const showResults = !!plants && getShowResults(values);
           const resultsPlants =
             showResults &&
+            values.plants &&
             plants.filter(plant => values.plants.includes(plant.name));
-
+          debugger;
           return (
             <form onSubmit={handleSubmit}>
               <Paper style={{ padding: '32px 16px' }}>
@@ -101,7 +105,7 @@ export const Estimate = () => {
                           showWallsSystems={showWallsSystems}
                         />
                       )}
-                      {showArea && (
+                      {showAreaAndNoiseReduction && (
                         <>
                           <Typography variant="h5" component="h2" gutterBottom>
                             Площадь озеленения, м²
@@ -111,10 +115,6 @@ export const Estimate = () => {
                             component={TextField}
                             type="number"
                           />
-                        </>
-                      )}
-                      {showNoiseReduction && (
-                        <>
                           <Typography variant="h5" component="h2" gutterBottom>
                             Минимальное шумопоглощение, дб
                           </Typography>

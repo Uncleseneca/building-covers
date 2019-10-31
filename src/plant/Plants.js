@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { usePlants } from './helpers/usePlants';
 import { removePlant } from './helpers/removePlant';
 import { plantSystems } from 'api/dictionaries';
+import { usePlantsContext } from './PlantsContext';
 
 const useStyles = makeStyles({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles({
 
 export function Plants() {
   const classes = useStyles({});
-  const plants = usePlants();
+  const plants = usePlantsContext();
   return (
     <Paper className={classes.root}>
       <Table>
