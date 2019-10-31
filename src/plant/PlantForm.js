@@ -6,6 +6,7 @@ import {
   Grid,
   Paper,
   Typography,
+  Box,
 } from '@material-ui/core';
 import { plantSystems } from 'api/dictionaries';
 import { Checkbox, TextField } from 'final-form-material-ui';
@@ -31,9 +32,11 @@ export function PlantForm({
 
   return (
     <div className="content-container">
-      <Typography variant="h4" align="center" component="h1" gutterBottom>
-        {title}
-      </Typography>
+      <Box mb={5}>
+        <Typography variant="h4" align="center" component="h1" gutterBottom>
+          {title}
+        </Typography>
+      </Box>
       <FinalForm
         key={key}
         initialValues={defaultValues}

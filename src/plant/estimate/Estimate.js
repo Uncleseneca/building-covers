@@ -11,33 +11,30 @@ import { Checkbox, TextField } from 'final-form-material-ui';
 import { isEmpty } from 'lodash';
 import { usePlantsContext } from 'plant/PlantsContext';
 import React from 'react';
-import { Field, Form as FinalForm } from 'react-final-form';
+import { Field, Form as FinalForm, FormSpy } from 'react-final-form';
 import { decorator } from './helpers/decorators';
 import { getPlants } from './helpers/getPlants';
-import { getShowResults } from './helpers/getShowResults';
+import { getShowResults as getShowResultsFromForm } from './helpers/getShowResults';
 import { Misc } from './Misc';
 import { ObjectType } from './ObjectType';
 import { Results } from './Results';
 import { System } from './System';
+import { withAutoSaveOnFieldBlur } from '@breadhead/form-saver';
 
-const initialValues = {
-  objectType: 'walls',
-  system: 'felt',
-  area: '102',
-  noiseReduction: '12',
-  plants: ['роза', '324рывапы'],
-  humanHours: '123',
-  machineHours: '234',
-  humanHoursCost: '34',
-  overheadRate: '2342',
-  machineHoursCost: '234',
-  reserveRate: '234',
-  installationMaterialsCost: '234',
-  overheadRateWorkers: 12,
-  overheadRateMachinists: 12,
-  shifts: 2,
-  workersAmount: 12,
+const ESTIMATE_FORM_KEY = 'building-covers-estimate';
+
+const initialValuesFromLocalStorage = localStorage.getItem(ESTIMATE_FORM_KEY);
+const initialValues = initialValuesFromLocalStorage
+  ? JSON.parse(initialValuesFromLocalStorage)
+  : null;
+
+const saveDataToLocalStorage = fields => {
+  return Promise.resolve(
+    localStorage.setItem(ESTIMATE_FORM_KEY, JSON.stringify(fields)),
+  );
 };
+
+const SaveSpy = withAutoSaveOnFieldBlur(FormSpy);
 
 export const Estimate = () => {
   const plants = usePlantsContext();
@@ -45,7 +42,7 @@ export const Estimate = () => {
   return (
     <div className="content-container">
       <Box mb={5}>
-        <Typography variant="h5" component="h1" gutterBottom>
+        <Typography variant="h4" component="h1" gutterBottom>
           Расчет растений
         </Typography>
       </Box>
@@ -64,15 +61,18 @@ export const Estimate = () => {
             !!values.noiseReduction &&
             !!plants &&
             !isEmpty(getPlants(plants, values));
+          const showEmptyPlantsListNote =
+            !!values.area && !!values.noiseReduction && !!values.system;
           const showMisc = !isEmpty(values.plants);
-          // TODO: make a real condition with context check
-          const showResults = !!plants && getShowResults(values);
+          const showResults =
+            !!plants && !!values.plants && getShowResultsFromForm(values);
           const resultsPlants =
             showResults &&
-            values.plants &&
             plants.filter(plant => values.plants.includes(plant.name));
+
           return (
             <form onSubmit={handleSubmit}>
+              <SaveSpy save={saveDataToLocalStorage}></SaveSpy>
               <Paper style={{ padding: '32px 16px' }}>
                 <Grid direction="column" container spacing={5}>
                   <Grid item xs={12}>
@@ -111,7 +111,7 @@ export const Estimate = () => {
                         </Box>
                       </>
                     )}
-                    {showPlants && (
+                    {showPlants ? (
                       <Box display="flex" flexDirection="column" mb={2}>
                         <Typography variant="h5" component="h2" gutterBottom>
                           Выбор растений
@@ -131,14 +131,25 @@ export const Estimate = () => {
                           />
                         ))}
                       </Box>
-                    )}
+                    ) : showEmptyPlantsListNote ? (
+                      <Box display="flex" flexDirection="column" mb={2}>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                          Не нашлось подходящих растений
+                        </Typography>
+                      </Box>
+                    ) : null}
                     {showMisc && (
                       <Box mb={2}>
                         <Misc />
                       </Box>
                     )}
-                    {showResults && (
+                    {!isEmpty(resultsPlants) && (
                       <Box mb={2}>
+                        <Box mb={3}>
+                          <Typography variant="h5" component="h4" gutterBottom>
+                            Результаты
+                          </Typography>
+                        </Box>
                         {resultsPlants.map(resultPlant => (
                           <Results
                             plant={resultPlant}

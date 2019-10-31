@@ -8,6 +8,7 @@ import { calculateCostPrice } from './helpers/calculateCostPrice';
 import { calculateWorkComplexity } from './helpers/calculateWorkComplexity';
 import { calculateWorkDuration } from './helpers/calculateWorkDuration';
 import { Box, Typography } from '@material-ui/core';
+import { formatNumber } from 'helpers/formatNumbers';
 
 export const Results = ({ plant, estimateContext }) => {
   return (
@@ -18,21 +19,23 @@ export const Results = ({ plant, estimateContext }) => {
       <Table>
         <TableBody>
           <TableRow>
-            <TableCell>Себестоимость работ</TableCell>
+            <TableCell>Себестоимость работ, руб</TableCell>
             <TableCell align="right">
-              {calculateCostPrice({ ...plant, ...estimateContext })}
+              {formatNumber(
+                calculateCostPrice({ ...plant, ...estimateContext }),
+              )}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Трудоемкость работ</TableCell>
+            <TableCell>Трудоемкость работ, часов</TableCell>
             <TableCell align="right">
-              {calculateWorkComplexity({ ...estimateContext })}
+              {formatNumber(calculateWorkComplexity({ ...estimateContext }))}
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Продолжительность работ</TableCell>
+            <TableCell>Продолжительность работ, дней</TableCell>
             <TableCell align="right">
-              {calculateWorkDuration({ ...estimateContext })}
+              {formatNumber(calculateWorkDuration({ ...estimateContext }))}
             </TableCell>
           </TableRow>
         </TableBody>
