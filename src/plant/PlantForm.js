@@ -12,6 +12,7 @@ import { plantSystems } from 'api/dictionaries';
 import { Checkbox, TextField } from 'final-form-material-ui';
 import React, { useState } from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
+import { validate } from './helpers/validate';
 
 export function PlantForm({
   title,
@@ -22,8 +23,8 @@ export function PlantForm({
   const [key, setKey] = useState(0);
 
   const handleFormSubmit = handleSubmit => {
-    return async values => {
-      await handleSubmit(values);
+    return async event => {
+      handleSubmit(event);
       if (resetAfterSubmit) {
         setKey(Math.random());
       }
@@ -41,7 +42,8 @@ export function PlantForm({
         key={key}
         initialValues={defaultValues}
         onSubmit={onSubmit}
-        render={({ handleSubmit, submitting }) => (
+        validate={validate}
+        render={({ handleSubmit, submitting, errors }) => (
           <form onSubmit={handleFormSubmit(handleSubmit)} noValidate>
             <Paper style={{ padding: 16 }}>
               <Grid
@@ -104,6 +106,7 @@ export function PlantForm({
                   >
                     Submit
                   </Button>
+                  {errors && errors.error && <div>{errors.error}</div>}
                 </Grid>
               </Grid>
             </Paper>
