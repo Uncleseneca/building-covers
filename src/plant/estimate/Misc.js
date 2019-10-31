@@ -13,47 +13,73 @@ export function Misc() {
         label="Число человеко-часов"
         name="humanHours"
         component={TextField}
-        type="text"
+        type="number"
       />
 
       <Field
         label="Число машино-часов"
         name="machineHours"
         component={TextField}
-        type="text"
+        type="number"
       />
 
       <Field
         label="Стоимость человеко-часов"
         name="humanHoursCost"
         component={TextField}
-        type="text"
+        type="number"
       />
 
       <Field
         label="Стоимость машино-часов"
         name="machineHoursCost"
         component={TextField}
-        type="text"
+        type="number"
       />
 
       <Field
         label="Коэффициент накладных расходов"
         name="overheadRate"
         component={TextField}
-        type="text"
+        type="number"
       />
 
       <Field
         label="Коэффициент резерва по виду работ"
-        name="workKindRate"
+        name="reserveRate"
         component={TextField}
-        type="text"
+        type="number"
+      />
+
+      <Field
+        label="Коэффициент накладных расходов к оплате труда рабочих"
+        name="overheadRateWorkers"
+        component={TextField}
+        type="number"
+      />
+
+      <Field
+        label="Коэффициент накладных расходов к оплате труда машинистов"
+        name="overheadRateMachinists"
+        component={TextField}
+        type="number"
+      />
+      <Field
+        label="Сменность работ"
+        name="shifts"
+        component={TextField}
+        type="number"
+      />
+      <Field
+        label="Общее кол-во рабочих"
+        name="workersAmount"
+        component={TextField}
+        type="number"
       />
 
       <Field
         label="Стоимость материалов для монтажа"
-        name="installationCost"
+        name="installationMaterialsCost"
         component={TextField}
         type="text"
       />

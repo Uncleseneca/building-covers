@@ -12,9 +12,10 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { usePlants } from '../helpers/usePlants';
-import { getPlants } from './getPlants';
+import { getPlants } from './helpers/getPlants';
 import { Misc } from './Misc';
 import { System } from './System';
+import { Results } from './Results';
 
 const initialValues = {
   objectType: 'walls',
@@ -27,13 +28,16 @@ const initialValues = {
   humanHoursCost: '34',
   overheadRate: '2342',
   machineHoursCost: '234',
-  workKindRate: '234',
-  installationCost: '234',
+  reserveRate: '234',
+  installationMaterialsCost: '234',
+  overheadRateWorkers: 12,
+  overheadRateMachinists: 12,
+  shifts: 2,
+  workersAmount: 12,
 };
 
 export const Estimate = () => {
   const plants = usePlants();
-  console.log('TCL: Estimate -> plants', plants);
 
   return (
     <div className="content-container">
@@ -54,7 +58,11 @@ export const Estimate = () => {
           const showNoiseReduction = !!values.area;
           const showPlants = !!values.noiseReduction && plants;
           const showMisc = !isEmpty(values.plants);
-          const showResults = true;
+          // TODO: make a real condition with context check
+          const showResults = !!plants;
+          const resultsPlants =
+            showResults &&
+            plants.filter(plant => values.plants.includes(plant.name));
 
           return (
             <form onSubmit={handleSubmit}>
@@ -133,17 +141,14 @@ export const Estimate = () => {
                           />
                         ))}
                       {showMisc && <Misc />}
-                      {showResults && (
-                        <>
-                          <div>
-                            {values.area *
-                              (plants &&
-                                plants.find(
-                                  plant => values.plants[0] === plant.name,
-                                ).costPerMeter)}
-                          </div>
-                        </>
-                      )}
+                      {showResults &&
+                        resultsPlants.map(resultPlant => (
+                          <Results
+                            plant={resultPlant}
+                            estimateContext={values}
+                            key={resultPlant.name}
+                          />
+                        ))}
                     </Grid>
                   </Grid>
                 </Grid>
