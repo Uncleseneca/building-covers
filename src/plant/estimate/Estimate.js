@@ -68,7 +68,8 @@ export const Estimate = () => {
           const showEmptyPlantsListNote =
             !!values.area && !!values.noiseReduction && !!values.system;
           const showMisc = !isEmpty(values.plants);
-          const showResults = !!values.plants && getShowResultsFromForm(values);
+          const showResults =
+            !!values.plants && getShowResultsFromForm(values) && showPlants;
           const resultsPlants = showResults && getResultsPlants(plants, values);
 
           return (

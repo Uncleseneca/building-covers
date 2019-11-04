@@ -23,4 +23,4 @@ export const getShowResults = ({
   !!overheadRateMachinists &&
   !!shifts &&
   !!workersAmount &&
-  plants.every(plant => !!plant.name && !!plant.share);
+  plants.every((plant = {}) => !!plant.name && !!plant.share);
