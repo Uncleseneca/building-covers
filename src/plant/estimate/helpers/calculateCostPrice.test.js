@@ -17,9 +17,12 @@ test('should work', () => {
     humanHoursCost: 24192.84,
     reserveRate: 0.02,
     installationMaterialsCost: 10586758.6,
-    costPerMeter: 8800,
+    plants: [
+      { costPerMeter: 220, share: 0.8 },
+      { costPerMeter: 100, share: 0.2 },
+    ],
     area: 220,
   });
 
-  expect(result).toBe(12554955);
+  expect(result).toBe(10662075);
 });

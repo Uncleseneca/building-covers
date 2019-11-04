@@ -10,20 +10,18 @@ import { calculateWorkDuration } from './helpers/calculateWorkDuration';
 import { Box, Typography } from '@material-ui/core';
 import { formatNumber } from 'helpers/formatNumbers';
 
-export const Results = ({ plant, estimateContext }) => {
+export const Results = ({ plants, estimateContext }) => {
   return (
     <Box mb={2}>
       <Typography variant="h5" component="h3" gutterBottom>
-        {plant.name}
+        {plants.map(plant => plant.name).join(', ')}
       </Typography>
       <Table>
         <TableBody>
           <TableRow>
             <TableCell>Себестоимость работ, руб</TableCell>
             <TableCell align="right">
-              {formatNumber(
-                calculateCostPrice({ ...plant, ...estimateContext }),
-              )}
+              {formatNumber(calculateCostPrice({ ...estimateContext, plants }))}
             </TableCell>
           </TableRow>
           <TableRow>

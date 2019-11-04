@@ -1,28 +1,21 @@
 // @ts-check
 import { withAutoSaveOnFieldBlur } from '@breadhead/form-saver';
-import {
-  Box,
-  Grid,
-  MenuItem,
-  Paper,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { Box, Grid, Paper, Typography } from '@material-ui/core';
 import { objectTypes } from 'api/dictionaries';
-import { Select, TextField, Input } from 'final-form-material-ui';
+import arrayMutators from 'final-form-arrays';
+import { TextField } from 'final-form-material-ui';
 import { isEmpty } from 'lodash';
 import { usePlantsContext } from 'plant/PlantsContext';
 import React from 'react';
 import { Field, Form as FinalForm, FormSpy } from 'react-final-form';
-import { decorator } from './helpers/decorators';
 import { getPlants } from './helpers/getPlants';
 import { getShowResults as getShowResultsFromForm } from './helpers/getShowResults';
 import { Misc } from './Misc';
 import { ObjectType } from './ObjectType';
-import { System } from './System';
-import arrayMutators from 'final-form-arrays';
-import { FieldArray } from 'react-final-form-arrays';
 import { PlantsPicker } from './PlantsPicker';
+import { System } from './System';
+import { Results } from './Results';
+import { getResultsPlants } from './helpers/getResultsPlants';
 
 const ESTIMATE_FORM_KEY = 'building-covers-estimate';
 
@@ -56,12 +49,11 @@ export const Estimate = () => {
         mutators={{ ...arrayMutators }}
         initialValues={initialValues}
         onSubmit={console.log}
-        // decorators={[decorator]}
         render={({
           handleSubmit,
           values,
           form: {
-            mutators: { push, pop },
+            mutators: { push },
           },
         }) => {
           const showSystems = !!values.objectType;
@@ -77,9 +69,7 @@ export const Estimate = () => {
             !!values.area && !!values.noiseReduction && !!values.system;
           const showMisc = !isEmpty(values.plants);
           const showResults = !!values.plants && getShowResultsFromForm(values);
-          const resultsPlants =
-            showResults &&
-            plants.filter(plant => values.plants.includes(plant.name));
+          const resultsPlants = showResults && getResultsPlants(plants, values);
 
           return (
             <form onSubmit={handleSubmit}>
@@ -140,22 +130,19 @@ export const Estimate = () => {
                         <Misc />
                       </Box>
                     )}
-                    {/* {!isEmpty(resultsPlants) && (
+                    {!isEmpty(resultsPlants) && (
                       <Box mb={2}>
                         <Box mb={3}>
                           <Typography variant="h5" component="h4" gutterBottom>
                             Результаты
                           </Typography>
                         </Box>
-                        {resultsPlants.map(resultPlant => (
-                          <Results
-                            plant={resultPlant}
-                            estimateContext={values}
-                            key={resultPlant.name}
-                          />
-                        ))}
+                        <Results
+                          plants={resultsPlants}
+                          estimateContext={values}
+                        />
                       </Box>
-                    )} */}
+                    )}
                   </Grid>
                 </Grid>
               </Paper>

@@ -5,9 +5,15 @@ export const calculateCostPrice = ({
   machineHoursCost,
   reserveRate,
   installationMaterialsCost,
-  costPerMeter,
   area,
+  plants,
 }) => {
+  const totalCostPerMeter =
+    plants.reduce((acc, plant) => {
+      acc = acc + Number(plant.costPerMeter) * Number(plant.share);
+      return acc;
+    }, 0) / 100;
+  console.log('TCL: totalCostPerMeter', totalCostPerMeter);
   const result =
     (Number(overheadRateMachinists) * Number(machineHoursCost) +
       Number(overheadRateWorkers) * Number(humanHoursCost)) *
@@ -15,6 +21,7 @@ export const calculateCostPrice = ({
     Number(overheadRateMachinists) * Number(machineHoursCost) +
     Number(overheadRateWorkers) * Number(humanHoursCost) +
     Number(installationMaterialsCost) +
-    Number(costPerMeter) * Number(area);
+    totalCostPerMeter * Number(area);
+
   return Number(result.toFixed(1));
 };

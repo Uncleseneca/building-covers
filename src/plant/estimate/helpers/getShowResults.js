@@ -10,6 +10,7 @@ export const getShowResults = ({
   overheadRateMachinists,
   shifts,
   workersAmount,
+  plants,
 }) =>
   !!humanHours &&
   !!machineHours &&
@@ -21,4 +22,5 @@ export const getShowResults = ({
   !!overheadRateWorkers &&
   !!overheadRateMachinists &&
   !!shifts &&
-  !!workersAmount;
+  !!workersAmount &&
+  plants.every(plant => !!plant.name && !!plant.share);
