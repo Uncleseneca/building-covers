@@ -27,3 +27,21 @@ label {
   margin: auto;
   max-width: 600px;
 }
+
+.plant-select-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
+  width: 100%;
+}
+
+.plant-select-box-outer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.plant-share-wrapper div {
+  height: 100%;
+}

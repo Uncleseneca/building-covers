@@ -1,13 +1,15 @@
 // @ts-check
+import { withAutoSaveOnFieldBlur } from '@breadhead/form-saver';
 import {
   Box,
-  FormControlLabel,
   Grid,
+  MenuItem,
   Paper,
   Typography,
+  Button,
 } from '@material-ui/core';
 import { objectTypes } from 'api/dictionaries';
-import { Checkbox, TextField } from 'final-form-material-ui';
+import { Select, TextField, Input } from 'final-form-material-ui';
 import { isEmpty } from 'lodash';
 import { usePlantsContext } from 'plant/PlantsContext';
 import React from 'react';
@@ -17,9 +19,10 @@ import { getPlants } from './helpers/getPlants';
 import { getShowResults as getShowResultsFromForm } from './helpers/getShowResults';
 import { Misc } from './Misc';
 import { ObjectType } from './ObjectType';
-import { Results } from './Results';
 import { System } from './System';
-import { withAutoSaveOnFieldBlur } from '@breadhead/form-saver';
+import arrayMutators from 'final-form-arrays';
+import { FieldArray } from 'react-final-form-arrays';
+import { PlantsPicker } from './PlantsPicker';
 
 const ESTIMATE_FORM_KEY = 'building-covers-estimate';
 
@@ -38,6 +41,9 @@ const SaveSpy = withAutoSaveOnFieldBlur(FormSpy);
 
 export const Estimate = () => {
   const plants = usePlantsContext();
+  if (!plants) {
+    return null;
+  }
 
   return (
     <div className="content-container">
@@ -47,10 +53,17 @@ export const Estimate = () => {
         </Typography>
       </Box>
       <FinalForm
+        mutators={{ ...arrayMutators }}
         initialValues={initialValues}
         onSubmit={console.log}
-        decorators={[decorator]}
-        render={({ handleSubmit, values }) => {
+        // decorators={[decorator]}
+        render={({
+          handleSubmit,
+          values,
+          form: {
+            mutators: { push, pop },
+          },
+        }) => {
           const showSystems = !!values.objectType;
           const showWallsSystems =
             values.objectType === objectTypes.walls.value;
@@ -59,13 +72,11 @@ export const Estimate = () => {
           const showPlants =
             !!values.area &&
             !!values.noiseReduction &&
-            !!plants &&
             !isEmpty(getPlants(plants, values));
           const showEmptyPlantsListNote =
             !!values.area && !!values.noiseReduction && !!values.system;
           const showMisc = !isEmpty(values.plants);
-          const showResults =
-            !!plants && !!values.plants && getShowResultsFromForm(values);
+          const showResults = !!values.plants && getShowResultsFromForm(values);
           const resultsPlants =
             showResults &&
             plants.filter(plant => values.plants.includes(plant.name));
@@ -112,25 +123,11 @@ export const Estimate = () => {
                       </>
                     )}
                     {showPlants ? (
-                      <Box display="flex" flexDirection="column" mb={2}>
-                        <Typography variant="h5" component="h2" gutterBottom>
-                          Выбор растений
-                        </Typography>
-                        {getPlants(plants, values).map(plant => (
-                          <FormControlLabel
-                            key={plant.name}
-                            label={plant.name}
-                            control={
-                              <Field
-                                name="plants"
-                                component={Checkbox}
-                                type="checkbox"
-                                value={plant.name}
-                              />
-                            }
-                          />
-                        ))}
-                      </Box>
+                      <PlantsPicker
+                        plants={plants}
+                        values={values}
+                        push={push}
+                      />
                     ) : showEmptyPlantsListNote ? (
                       <Box display="flex" flexDirection="column" mb={2}>
                         <Typography variant="h5" component="h2" gutterBottom>
@@ -143,7 +140,7 @@ export const Estimate = () => {
                         <Misc />
                       </Box>
                     )}
-                    {!isEmpty(resultsPlants) && (
+                    {/* {!isEmpty(resultsPlants) && (
                       <Box mb={2}>
                         <Box mb={3}>
                           <Typography variant="h5" component="h4" gutterBottom>
@@ -158,7 +155,7 @@ export const Estimate = () => {
                           />
                         ))}
                       </Box>
-                    )}
+                    )} */}
                   </Grid>
                 </Grid>
               </Paper>
