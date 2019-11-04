@@ -57,9 +57,8 @@ export const Estimate = () => {
           },
         }) => {
           const showSystems = !!values.objectType;
-          const showWallsSystems =
-            values.objectType === objectTypes.walls.value;
-          const showRoofSystems = values.objectType === objectTypes.roof.value;
+          const showWallsSystems = values.objectType === objectTypes.roof.value;
+          const showRoofSystems = values.objectType === objectTypes.walls.value;
           const showAreaAndNoiseReduction = !!values.system;
           const showPlants =
             !!values.area &&
