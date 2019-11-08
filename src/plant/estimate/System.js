@@ -57,7 +57,7 @@ export const System = ({ showWallsSystems, showRoofSystems }) => (
                 name="system"
                 component={Radio}
                 type="radio"
-                value={plantSystems.extensive.label}
+                value={plantSystems.extensive.value}
               />
             }
           />
@@ -68,7 +68,7 @@ export const System = ({ showWallsSystems, showRoofSystems }) => (
                 name="system"
                 component={Radio}
                 type="radio"
-                value={plantSystems.intensive.label}
+                value={plantSystems.intensive.value}
               />
             }
           />
